@@ -1,7 +1,7 @@
 import React from "react";
 
 function App() {
-  return <div></div>;
+  return <div>Đây là app</div>;
 }
 
 export default App;
