@@ -8,6 +8,18 @@ const LayoutAuthentication = (props) => {
   const { children, heading = "" } = props;
   return (
     <div className="relative w-full min-h-screen p-10 bg-lite dark:bg-darkbg isolate">
+      {/* <span className="hidden lg:block absolute bottom-0 left-0 right-0 pointer-events-none z-[-1]">
+        <svg
+          width="1440"
+          height="552"
+          viewBox="0 0 1440 552"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full"
+        >
+          <circle opacity="0.03" cx="1001" cy="1419" r="1419" fill="#6F49FD" />
+        </svg>
+      </span> */}
       <img
         src="/ellipse.png"
         alt="bg"

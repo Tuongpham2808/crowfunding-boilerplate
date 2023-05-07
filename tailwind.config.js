@@ -30,6 +30,8 @@ module.exports = {
       },
       boxShadow: {
         sdprimary: "10px 10px 20px rgba(211, 211, 211, 0.25)",
+        sdsecondary:
+          "0px 2px 4px rgba(184, 184, 184, 0.03), 0px 6px 12px rgba(184, 184, 184, 0.02), 0px 12px 20px rgba(184, 184, 184, 0.03)",
       },
     },
   },

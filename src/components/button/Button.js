@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const Button = ({
   type = "button",
@@ -13,9 +14,36 @@ const Button = ({
   ) : (
     children
   );
+
+  let defaultClassName =
+    "p-4 text-base font-semibold rounded-xl min-h-[52px] flex items-center justify-center";
+
+  switch (rest.kind) {
+    case "primary":
+      defaultClassName = defaultClassName + " bg-primary text-white";
+      break;
+    case "secondary":
+      defaultClassName =
+        defaultClassName + " bg-secondary bg-opacity-80 text-white";
+      break;
+    case "ghost":
+      defaultClassName =
+        defaultClassName + " bg-secondary bg-opacity-10 text-secondary";
+      break;
+
+    default:
+      break;
+  }
+
+  if (rest.href)
+    return (
+      <Link to={rest.href} className={`${defaultClassName} ${className}`}>
+        {child}
+      </Link>
+    );
   return (
     <button
-      className={`p-4 text-white text-base font-semibold rounded-xl min-h-[52px] flex items-center justify-center bg-primary ${
+      className={`${defaultClassName} ${
         !!isLoading ? "opacity-50 pointer-events-none" : ""
       } ${className}`}
       type={type}
@@ -26,10 +54,12 @@ const Button = ({
   );
 };
 Button.propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   children: PropTypes.node,
   className: PropTypes.string,
   isLoading: PropTypes.bool,
+  href: PropTypes.string,
+  kind: PropTypes.oneOf(["primary", "secondary", "ghost"]),
 };
 
 export default Button;

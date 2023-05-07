@@ -3,9 +3,32 @@
 @tailwind utilities;
 @layer base {
   body {
-    @apply font-primary text-base;
+    @apply font-primary text-base font-normal mx-auto;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    max-width: 1440px;
   }
   input {
     @apply outline-none;
+  }
+  input:focus + .error-input {
+    display: none;
+  }
+}
+
+.quill {
+  @apply w-auto text-center px-6 py-4 rounded-lg border border-strock relative;
+  .ql-toolbar.ql-snow {
+    @apply bg-text4 bg-opacity-10 rounded-xl px-3 py-5 inline-flex justify-center border-none mx-auto z-10 sticky top-0;
+  }
+  .ql-container.ql-snow {
+    border: none;
+    .ql-editor.ql-blank {
+      min-height: 303px;
+    }
+  }
+  .ql-editor.ql-blank::before {
+    font-style: normal;
   }
 }

@@ -24,10 +24,10 @@ const Input = (props) => {
       <input
         id={name}
         type={type}
-        className={`w-full px-6 py-4 text-sm font-medium border rounded-xl text-text1 dark:text-white bg-transparent ${
+        className={`w-full px-6 py-4 text-sm font-medium border rounded-xl dark:text-white bg-transparent ${
           error.length > 0
-            ? "border-error placeholder:text-error"
-            : "border-strock placeholder:text-text4 dark:border-darkStroke dark:placeholder:text-text2"
+            ? "border-error placeholder:text-error text-error"
+            : "border-strock text-text1 placeholder:text-text4 dark:border-darkStroke dark:placeholder:text-text2"
         } ${children ? "pr-16" : ""}`}
         placeholder={error.length > 0 ? error : placeholder}
         {...field}
