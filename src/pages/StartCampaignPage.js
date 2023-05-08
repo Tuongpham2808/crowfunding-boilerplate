@@ -1,12 +1,11 @@
-import LayoutDashboard from "layout/LayoutDashboard";
 import CampainAddNew from "modules/campaign/CampainAddNew";
-import React from "react";
+import React, { Fragment } from "react";
 
 const StartCampaignPage = () => {
   return (
-    <LayoutDashboard>
+    <Fragment>
       <CampainAddNew></CampainAddNew>
-    </LayoutDashboard>
+    </Fragment>
   );
 };
 
