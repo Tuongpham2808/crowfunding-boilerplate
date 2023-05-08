@@ -1,5 +1,5 @@
 import ReactQuill, { Quill } from "react-quill";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ImageUploader from "quill-image-uploader";
 import FormRow from "components/common/FormRow";
 import FormGroup from "components/common/FormGroup";
@@ -11,14 +11,26 @@ import { imgbbAPI } from "config/apiConfig";
 import { Dropdown } from "components/dropdown";
 import "react-quill/dist/quill.snow.css";
 import { Button } from "components/button";
+import useOnchange from "hooks/useOnchange";
+import { toast } from "react-toastify";
+import DatePicker from "react-date-picker";
+import "react-date-picker/dist/DatePicker.css";
+import "react-calendar/dist/Calendar.css";
 
 Quill.register("modules/imageUploader", ImageUploader);
 
-const CampainAddNew = () => {
+const CampaignAddNew = () => {
   const [content, setContent] = useState("");
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, setValue } = useForm({
     mode: "onSubmit",
   });
+
+  const handleSelectDropdownOption = (name, value) => {
+    setValue(name, value);
+  };
+  const handleSelectyCategory = (value) => {
+    setValue("category", value);
+  };
 
   const handleAddNewCampain = (values) => {
     console.log(values);
@@ -56,6 +68,26 @@ const CampainAddNew = () => {
     []
   );
 
+  const [countries, setCountries] = useState([]);
+  const [filterCountry, setFilterCountry] = useOnchange(500);
+  useEffect(() => {
+    if (!filterCountry) return;
+    async function fetchCountries() {
+      try {
+        const response = await axios.get(
+          `https://restcountries.com/v3.1/name/${filterCountry}`
+        );
+        setCountries(response.data);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
+    fetchCountries();
+  }, [filterCountry]);
+
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
   return (
     <div className="bg-white rounded-xl py-10 px-[66px]">
       <div className="mb-10 text-center">
@@ -82,9 +114,11 @@ const CampainAddNew = () => {
             <Dropdown>
               <Dropdown.Select placeholder="Select a category"></Dropdown.Select>
               <Dropdown.List>
-                <Dropdown.Option>Real Estate</Dropdown.Option>
-                <Dropdown.Option>Education</Dropdown.Option>
-                <Dropdown.Option>Home</Dropdown.Option>
+                <Dropdown.Option
+                  onClick={() => handleSelectyCategory("Real Estate")}
+                >
+                  Real Estate
+                </Dropdown.Option>
               </Dropdown.List>
             </Dropdown>
           </FormGroup>
@@ -160,9 +194,24 @@ const CampainAddNew = () => {
             <Dropdown>
               <Dropdown.Select placeholder="Select a country"></Dropdown.Select>
               <Dropdown.List>
-                <Dropdown.Option>Ha noi</Dropdown.Option>
-                <Dropdown.Option>Da nang</Dropdown.Option>
-                <Dropdown.Option>HCM city</Dropdown.Option>
+                <Dropdown.Search
+                  placeholder="Search country"
+                  onChange={setFilterCountry}
+                ></Dropdown.Search>
+                {countries.length > 0 &&
+                  countries.map((country) => (
+                    <Dropdown.Option
+                      key={country?.name?.common}
+                      onClick={() =>
+                        handleSelectDropdownOption(
+                          "country",
+                          country?.name?.common
+                        )
+                      }
+                    >
+                      {country?.name?.common}
+                    </Dropdown.Option>
+                  ))}
               </Dropdown.List>
             </Dropdown>
           </FormGroup>
@@ -171,21 +220,31 @@ const CampainAddNew = () => {
         <FormRow>
           <FormGroup>
             <Label>Start Date</Label>
-            <Input
+            {/* <Input
               type="date"
               control={control}
               name="start_date"
               placeholder="Start Date"
-            ></Input>
+            ></Input> */}
+            <DatePicker
+              onChange={setStartDate}
+              value={startDate}
+              format="dd-MM-yyyy"
+            />
           </FormGroup>
           <FormGroup>
             <Label>End Date</Label>
-            <Input
+            {/* <Input
               type="date"
               control={control}
               name="end_date"
               placeholder="End Date"
-            ></Input>
+            ></Input> */}
+            <DatePicker
+              onChange={setEndDate}
+              value={endDate}
+              format="dd-MM-yyyy"
+            />
           </FormGroup>
         </FormRow>
         {/* submit */}
@@ -199,4 +258,4 @@ const CampainAddNew = () => {
   );
 };
 
-export default CampainAddNew;
+export default CampaignAddNew;

@@ -13,7 +13,7 @@ import CampaignPerk from "./CampaignPerk";
 import CampaignGrid from "./CampaignGrid";
 import CampaignItem from "./CampaignItem";
 
-const CampainView = () => {
+const CampaignView = () => {
   return (
     <Fragment>
       <div className="h-[140px] rounded-3xl overflow-hidden w-full bg-center bg-no-repeat bg-cover bg-opacity-40 flex items-center justify-center mb-10 gradient-banner">
@@ -110,4 +110,4 @@ const CampainView = () => {
   );
 };
 
-export default CampainView;
+export default CampaignView;

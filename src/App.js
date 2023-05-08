@@ -8,11 +8,13 @@ const SignInPage = lazy(() => import("./pages/SignInPage"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const CampaignPage = lazy(() => import("./pages/CampaignPage"));
 const StartCampaignPage = lazy(() => import("./pages/StartCampaignPage"));
-const CampainView = lazy(() => import("modules/campaign/CampainView"));
+const WithdrawPage = lazy(() => import("./pages/WithdrawPage"));
+const PaymentPage = lazy(() => import("./pages/PaymentPage"));
+const CheckoutPage = lazy(() => import("./pages/CheckoutPage"));
+const ShippingPage = lazy(() => import("./pages/ShippingPage"));
+const CampaignView = lazy(() => import("modules/campaign/CampaignView"));
+const LayoutPayment = lazy(() => import("layout/LayoutPayment"));
 
-const customStyles = {
-  content: {},
-};
 Modal.setAppElement("#root");
 Modal.defaultStyles = {};
 
@@ -23,6 +25,11 @@ function App() {
         <Route element={<LayoutDashboard></LayoutDashboard>}>
           <Route path="/" element={<DashboardPage></DashboardPage>}></Route>
           <Route
+            path="/withdraw"
+            element={<WithdrawPage></WithdrawPage>}
+          ></Route>
+          <Route path="/payment" element={<PaymentPage></PaymentPage>}></Route>
+          <Route
             path="/campaign"
             element={<CampaignPage></CampaignPage>}
           ></Route>
@@ -32,7 +39,17 @@ function App() {
           ></Route>
           <Route
             path="/campaign/:slug"
-            element={<CampainView></CampainView>}
+            element={<CampaignView></CampaignView>}
+          ></Route>
+        </Route>
+        <Route element={<LayoutPayment></LayoutPayment>}>
+          <Route
+            path="/checkout"
+            element={<CheckoutPage></CheckoutPage>}
+          ></Route>
+          <Route
+            path="/shipping-address"
+            element={<ShippingPage></ShippingPage>}
           ></Route>
         </Route>
         <Route path="/sign-up" element={<SignUpPage></SignUpPage>}></Route>
