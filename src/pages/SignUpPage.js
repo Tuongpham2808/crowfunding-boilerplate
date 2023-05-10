@@ -11,6 +11,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { IconEyeToggle } from "components/icons";
 import useToggleValue from "hooks/useToggleValue";
+import { useDispatch } from "react-redux";
+import { authRegister } from "store/auth/auth-slice";
 
 const schema = yup.object({
   name: yup.string().required("This field is required"),
@@ -31,14 +33,21 @@ const SignUpPage = () => {
     getValues,
     setValue,
     watch,
+    reset,
     formState: { errors, isLoading, isSubmitting, isValid },
   } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
+  const dispatch = useDispatch();
 
-  const handleSignUp = (values) => {
-    console.log(values);
+  const handleSignUp = async (values) => {
+    try {
+      dispatch(authRegister(values));
+      reset({});
+    } catch (error) {
+      console.log(error);
+    }
   };
   const { value: acceptTerm, handleToggleValue: handleToggleTerm } =
     useToggleValue(false);
@@ -49,8 +58,8 @@ const SignUpPage = () => {
     <LayoutAuthentication heading="SignUp">
       <p className="mb-6 text-xs font-normal text-center lg:text-sm text-text3 lg:mb-8">
         Already have an account?
-        <Link to={"/sign-in"} className="font-semibold underline text-primary">
-          Sign in
+        <Link to={"/login"} className="font-semibold underline text-primary">
+          Login
         </Link>
       </p>
       <button className="flex items-center justify-center w-full py-4 mb-5 text-base font-semibold border gap-x-2 border-strock rounded-xl text-text2 dark:text-white dark:border-darkStroke">

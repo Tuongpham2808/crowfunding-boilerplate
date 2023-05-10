@@ -10,6 +10,8 @@ import { Label } from "components/label";
 import { Input } from "components/input";
 import { IconEyeToggle } from "components/icons";
 import { Button, ButtonGoogle } from "components/button";
+import { useDispatch } from "react-redux";
+import { authLogin } from "store/auth/auth-slice";
 
 const schema = yup.object({
   email: yup.string().email("").required("This field is required"),
@@ -31,9 +33,9 @@ const SignInPage = () => {
 
   const { value: showPassword, handleToggleValue: handleTogglePassword } =
     useToggleValue(false);
-
+  const dispatch = useDispatch();
   const handleSignIn = (values) => {
-    console.log(values);
+    dispatch(authLogin(values));
   };
 
   return (

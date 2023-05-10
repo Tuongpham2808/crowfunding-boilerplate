@@ -12,24 +12,27 @@ const cors = require("cors");
 const bcrypt = require("bcrypt");
 app.use(cors());
 const generateTokens = (payload) => {
-  const { id, name } = payload;
-  const accessToken = jwt.sign({ id, name }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "5m",
-  });
+  const { id, username } = payload;
+  const accessToken = jwt.sign(
+    { id, username },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: "30s",
+    }
+  );
   const refreshToken = jwt.sign(
-    { id, name },
+    { id, username },
     process.env.REFRESH_TOKEN_SECRET,
     {
-      expiresIn: "48h",
+      expiresIn: "24h",
     }
   );
 
   return { accessToken, refreshToken };
 };
-function updateRefreshToken(name, refreshToken) {
-  console.log("updateRefreshToken ~ name", name);
+function updateRefreshToken(username, refreshToken) {
   users = users.map((user) => {
-    if (user.name === name) {
+    if (user.username === username) {
       return {
         ...user,
         refreshToken,
@@ -54,17 +57,9 @@ app.post("/auth/login", (req, res) => {
   if (!user) return res.sendStatus(401);
   const dbPassword = user.password;
   bcrypt.compare(req.body.password, dbPassword, (err, hash) => {
-    if (err || !hash) {
-      res.status(403).json({
-        statusCode: 403,
-        error: {
-          message: "Password does not match",
-        },
-      });
-    }
+    if (err || !hash) return;
     const tokens = generateTokens(user);
-
-    updateRefreshToken(user.name, tokens.refreshToken);
+    updateRefreshToken(user.username, tokens.refreshToken);
     res.json(tokens);
   });
 });
@@ -79,7 +74,7 @@ app.post("/token", (req, res) => {
   try {
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     const tokens = generateTokens(user);
-    updateRefreshToken(user.name, tokens.refreshToken);
+    updateRefreshToken(user.username, tokens.refreshToken);
     res.json(tokens);
   } catch (err) {
     console.log(err);
@@ -88,7 +83,7 @@ app.post("/token", (req, res) => {
 });
 
 app.post("/auth/register", (req, res) => {
-  const { name, password, email, permissions } = req.body;
+  const { name, password, email } = req.body;
   const user = users.find((user) => {
     return user.email === email;
   });
@@ -105,7 +100,6 @@ app.post("/auth/register", (req, res) => {
       password: hash,
       email,
       refreshToken: null,
-      permissions,
     });
     fs.writeFileSync("db.json", JSON.stringify({ ...database, users }));
     res.sendStatus(201);
@@ -114,7 +108,7 @@ app.post("/auth/register", (req, res) => {
 
 app.delete("/logout", verifyToken, (req, res) => {
   const user = users.find((user) => user.id === req.userId);
-  updateRefreshToken(user.name, "");
+  updateRefreshToken(user.username, "");
   res.sendStatus(204);
 });
 
