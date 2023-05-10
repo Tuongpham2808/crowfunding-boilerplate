@@ -8,7 +8,7 @@ const Select = ({ placeholder = "", className = "" }) => {
       className={`flex items-center justify-between px-5 bg-white border border-strock rounded-lg cursor-pointer text-sm text-text1 py-4 font-medium ${className}`}
       onClick={toggle}
     >
-      <span>{placeholder}</span>
+      <span className="capitalize">{placeholder}</span>
       <span>
         {show ? (
           <svg

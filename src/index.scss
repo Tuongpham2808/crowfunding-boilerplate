@@ -20,7 +20,7 @@
 .quill {
   @apply w-auto text-center px-6 py-4 rounded-lg border border-strock relative;
   .ql-toolbar.ql-snow {
-    @apply bg-text4 bg-opacity-10 rounded-xl px-3 py-5 inline-flex justify-center border-none mx-auto z-10 sticky top-0;
+    @apply bg-[#F9F9FA] rounded-xl px-3 py-5 inline-flex justify-center border-none mx-auto z-10 sticky top-0;
   }
   .ql-container.ql-snow {
     border: none;

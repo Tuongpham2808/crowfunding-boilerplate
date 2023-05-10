@@ -16,26 +16,28 @@ import { toast } from "react-toastify";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
+import { v4 } from "uuid";
+import { apiURL } from "config/config";
+import ImageUpload from "components/image/ImageUpload";
 
 Quill.register("modules/imageUploader", ImageUploader);
+const categoriesData = ["architecture", "education"];
+const endMethodsData = ["architecture", "education"];
 
 const CampaignAddNew = () => {
   const [content, setContent] = useState("");
-  const { control, handleSubmit, setValue } = useForm({
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const { control, handleSubmit, setValue, reset, watch } = useForm({
     mode: "onSubmit",
   });
-
+  const getDropdownLabel = (name, defaultValue) => {
+    const value = watch(name) || defaultValue;
+    return value;
+  };
   const handleSelectDropdownOption = (name, value) => {
     setValue(name, value);
   };
-  const handleSelectyCategory = (value) => {
-    setValue("category", value);
-  };
-
-  const handleAddNewCampain = (values) => {
-    console.log(values);
-  };
-
   const modules = useMemo(
     () => ({
       toolbar: [
@@ -67,7 +69,6 @@ const CampaignAddNew = () => {
     }),
     []
   );
-
   const [countries, setCountries] = useState([]);
   const [filterCountry, setFilterCountry] = useOnchange(500);
   useEffect(() => {
@@ -85,8 +86,27 @@ const CampaignAddNew = () => {
     fetchCountries();
   }, [filterCountry]);
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const resetValues = () => {
+    setStartDate(new Date());
+    setEndDate(new Date());
+    reset({});
+  };
+
+  const handleAddNewCampain = async (values) => {
+    console.log(values);
+    try {
+      await axios.post(`${apiURL}/campaigns`, {
+        ...values,
+        content,
+        startDate,
+        endDate,
+      });
+      toast.success("Create campaign successfully");
+      resetValues();
+    } catch (error) {
+      toast.error("Can not create new campaign");
+    }
+  };
 
   return (
     <div className="bg-white rounded-xl py-10 px-[66px]">
@@ -112,13 +132,20 @@ const CampaignAddNew = () => {
           <FormGroup>
             <Label>Select a category *</Label>
             <Dropdown>
-              <Dropdown.Select placeholder="Select a category"></Dropdown.Select>
+              <Dropdown.Select
+                placeholder={getDropdownLabel("category", "Select a category")}
+              ></Dropdown.Select>
               <Dropdown.List>
-                <Dropdown.Option
-                  onClick={() => handleSelectyCategory("Real Estate")}
-                >
-                  Real Estate
-                </Dropdown.Option>
+                {categoriesData.map((category) => (
+                  <Dropdown.Option
+                    key={v4()}
+                    onClick={() =>
+                      handleSelectDropdownOption("category", category)
+                    }
+                  >
+                    <span className="capitalize">{category}</span>
+                  </Dropdown.Option>
+                ))}
               </Dropdown.List>
             </Dropdown>
           </FormGroup>
@@ -142,6 +169,16 @@ const CampaignAddNew = () => {
             placeholder="Write your story......"
           />
         </FormGroup>
+        {/* row 2.5 */}
+        <FormRow>
+          <FormGroup>
+            <Label>Featured Image</Label>
+            <ImageUpload
+              name="featured_image"
+              onChange={setValue}
+            ></ImageUpload>
+          </FormGroup>
+        </FormRow>
         {/* row 3 */}
         <FormRow>
           <FormGroup>
@@ -181,18 +218,29 @@ const CampaignAddNew = () => {
           <FormGroup>
             <Label>Campaign End Method</Label>
             <Dropdown>
-              <Dropdown.Select placeholder="Select one"></Dropdown.Select>
+              <Dropdown.Select
+                placeholder={getDropdownLabel("endMethod", "Select one")}
+              ></Dropdown.Select>
               <Dropdown.List>
-                <Dropdown.Option>Real Estate</Dropdown.Option>
-                <Dropdown.Option>Education</Dropdown.Option>
-                <Dropdown.Option>Home</Dropdown.Option>
+                {endMethodsData.map((endMethod) => (
+                  <Dropdown.Option
+                    key={v4()}
+                    onClick={() =>
+                      handleSelectDropdownOption("endMethod", endMethod)
+                    }
+                  >
+                    <span className="capitalize">{endMethod}</span>
+                  </Dropdown.Option>
+                ))}
               </Dropdown.List>
             </Dropdown>
           </FormGroup>
           <FormGroup>
             <Label>Counrty</Label>
             <Dropdown>
-              <Dropdown.Select placeholder="Select a country"></Dropdown.Select>
+              <Dropdown.Select
+                placeholder={getDropdownLabel("country", "Select a country")}
+              ></Dropdown.Select>
               <Dropdown.List>
                 <Dropdown.Search
                   placeholder="Search country"
@@ -220,12 +268,6 @@ const CampaignAddNew = () => {
         <FormRow>
           <FormGroup>
             <Label>Start Date</Label>
-            {/* <Input
-              type="date"
-              control={control}
-              name="start_date"
-              placeholder="Start Date"
-            ></Input> */}
             <DatePicker
               onChange={setStartDate}
               value={startDate}
@@ -234,12 +276,6 @@ const CampaignAddNew = () => {
           </FormGroup>
           <FormGroup>
             <Label>End Date</Label>
-            {/* <Input
-              type="date"
-              control={control}
-              name="end_date"
-              placeholder="End Date"
-            ></Input> */}
             <DatePicker
               onChange={setEndDate}
               value={endDate}
@@ -249,7 +285,7 @@ const CampaignAddNew = () => {
         </FormRow>
         {/* submit */}
         <FormGroup className="text-center">
-          <Button kind="primary" className="px-10 py-3 mx-auto">
+          <Button kind="primary" className="px-10 py-3 mx-auto" type="submit">
             Submit new campaign
           </Button>
         </FormGroup>

@@ -1,5 +1,26 @@
 {
   "users": [],
   "categories": [],
-  "campaigns": []
+  "campaigns": [
+    {
+      "title": "Meet - AI Virtual Background 4K Webcam",
+      "short_description": "The first-ever 4K webcam that embeded AI technology to\nprotect your background during video calls.",
+      "goal": "400",
+      "amount": "200",
+      "prefilled": "20,30",
+      "video": "https://www.youtube.com/watch?v=kuLl7_r2m6A&ab_channel=NOD",
+      "category": "architecture",
+      "country": "Ivory Coast",
+      "endMethod": "architecture",
+      "featured_image": {
+        "medium": "https://i.ibb.co/Yhd5yQS/anh-nhung-co-gai-de-thuong.jpg",
+        "thumb": "https://i.ibb.co/9W4xVg0/anh-nhung-co-gai-de-thuong.jpg",
+        "url": "https://i.ibb.co/sq1T6R4/anh-nhung-co-gai-de-thuong.jpg"
+      },
+      "content": "<p>The first-ever 4K webcam that embeded AI technology to</p><p>protect your background during video calls.</p>",
+      "startDate": "2023-05-09T07:51:25.746Z",
+      "endDate": "2023-05-09T07:51:25.746Z",
+      "id": 3
+    }
+  ]
 }
