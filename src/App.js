@@ -1,24 +1,33 @@
 import LayoutDashboard from "layout/LayoutDashboard";
-import React, { Suspense, lazy } from "react";
-import { Route, Routes } from "react-router-dom";
+import CampaignView from "modules/campaign/CampaignView";
+import React, { lazy, Suspense } from "react";
+import { Routes, Route } from "react-router-dom";
 import Modal from "react-modal";
-
+import LayoutPayment from "layout/LayoutPayment";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 const SignUpPage = lazy(() => import("./pages/SignUpPage"));
 const SignInPage = lazy(() => import("./pages/SignInPage"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const CampaignPage = lazy(() => import("./pages/CampaignPage"));
 const StartCampaignPage = lazy(() => import("./pages/StartCampaignPage"));
-const WithdrawPage = lazy(() => import("./pages/WithdrawPage"));
-const PaymentPage = lazy(() => import("./pages/PaymentPage"));
 const CheckoutPage = lazy(() => import("./pages/CheckoutPage"));
 const ShippingPage = lazy(() => import("./pages/ShippingPage"));
-const CampaignView = lazy(() => import("modules/campaign/CampaignView"));
-const LayoutPayment = lazy(() => import("layout/LayoutPayment"));
+const PaymentPage = lazy(() => import("./pages/PaymentPage"));
+const WithdrawPage = lazy(() => import("./pages/WithdrawPage"));
 
 Modal.setAppElement("#root");
 Modal.defaultStyles = {};
 
 function App() {
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (user && user.id) {
+      //
+    } else {
+    }
+  }, [user]);
   return (
     <Suspense>
       <Routes>
@@ -52,7 +61,7 @@ function App() {
             element={<ShippingPage></ShippingPage>}
           ></Route>
         </Route>
-        <Route path="/sign-up" element={<SignUpPage></SignUpPage>}></Route>
+        <Route path="/register" element={<SignUpPage></SignUpPage>}></Route>
         <Route path="/login" element={<SignInPage></SignInPage>}></Route>
       </Routes>
     </Suspense>
