@@ -19,3 +19,12 @@ export const requestAuthFetchMe = (token) => {
     },
   });
 };
+
+export const requestAuthRefreshToken = (token) => {
+  // console.log("token", token);
+  if (!token) return;
+  return axios.post("/token", {
+    // "Content-Type": "Application/json",
+    refreshToken: token,
+  });
+};
