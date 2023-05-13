@@ -3,6 +3,7 @@ import Overlay from "components/common/Overlay";
 import CampaignPerk from "modules/campaign/CampaignPerk";
 import DashboardSidebar from "modules/dashboard/DashboardSidebar";
 import DashboardTopbar from "modules/dashboard/DashboardTopbar";
+import RequiredAuthPage from "pages/RequiredAuthPage";
 import React from "react";
 import ReactModal from "react-modal";
 import { Outlet } from "react-router";

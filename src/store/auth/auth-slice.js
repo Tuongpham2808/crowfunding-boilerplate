@@ -9,7 +9,7 @@ const authSlice = createSlice({
   reducers: {
     authLogin: (state, action) => ({
       ...state,
-      ...action.payload,
+      // ...action.payload,
     }),
     authRegister: (state, action) => ({
       ...state,
@@ -17,7 +17,7 @@ const authSlice = createSlice({
     }),
     authUpdateUser: (state, action) => {
       return {
-        ...state,
+        // ...state,
         user: action.payload.user,
         accessToken: action.payload.accessToken,
       };
@@ -27,6 +27,7 @@ const authSlice = createSlice({
       ...action.payload,
     }),
     authRefreshToken: (state, action) => ({}),
+    authLogOut: (state, action) => ({}),
   },
 });
 export const {
@@ -35,5 +36,6 @@ export const {
   authUpdateUser,
   authFetchMe,
   authRefreshToken,
+  authLogOut,
 } = authSlice.actions;
 export default authSlice.reducer;

@@ -7,7 +7,9 @@ import LayoutPayment from "layout/LayoutPayment";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { authRefreshToken, authUpdateUser } from "store/auth/auth-slice";
-import { getToken } from "utils/auth";
+import { getToken, logOut } from "utils/auth";
+import RequiredAuthPage from "pages/RequiredAuthPage";
+import { permissions } from "constants/permissions";
 const SignUpPage = lazy(() => import("./pages/SignUpPage"));
 const SignInPage = lazy(() => import("./pages/SignInPage"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
@@ -17,6 +19,7 @@ const CheckoutPage = lazy(() => import("./pages/CheckoutPage"));
 const ShippingPage = lazy(() => import("./pages/ShippingPage"));
 const PaymentPage = lazy(() => import("./pages/PaymentPage"));
 const WithdrawPage = lazy(() => import("./pages/WithdrawPage"));
+const UnauthorizePage = lazy(() => import("./pages/UnauthorizePage"));
 
 Modal.setAppElement("#root");
 Modal.defaultStyles = {};
@@ -39,6 +42,7 @@ function App() {
         dispatch(authRefreshToken(refresh_token));
       } else {
         dispatch(authUpdateUser({}));
+        logOut();
       }
     }
   }, [dispatch, user]);
@@ -47,6 +51,10 @@ function App() {
       <Routes>
         <Route element={<LayoutDashboard></LayoutDashboard>}>
           <Route path="/" element={<DashboardPage></DashboardPage>}></Route>
+          <Route
+            path="/unauthorize"
+            element={<UnauthorizePage></UnauthorizePage>}
+          ></Route>
           <Route
             path="/withdraw"
             element={<WithdrawPage></WithdrawPage>}
@@ -57,9 +65,17 @@ function App() {
             element={<CampaignPage></CampaignPage>}
           ></Route>
           <Route
-            path="/start-campaign"
-            element={<StartCampaignPage></StartCampaignPage>}
-          ></Route>
+            element={
+              <RequiredAuthPage
+                allowPermissions={[permissions.campaign.CREAT_CAMPAIGN]}
+              ></RequiredAuthPage>
+            }
+          >
+            <Route
+              path="/start-campaign"
+              element={<StartCampaignPage></StartCampaignPage>}
+            ></Route>
+          </Route>
           <Route
             path="/campaign/:slug"
             element={<CampaignView></CampaignView>}

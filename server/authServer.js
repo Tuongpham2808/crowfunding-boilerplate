@@ -24,7 +24,7 @@ const generateTokens = (payload) => {
     { id, username },
     process.env.REFRESH_TOKEN_SECRET,
     {
-      expiresIn: "24h",
+      expiresIn: "48h",
     }
   );
 
@@ -91,7 +91,7 @@ app.post("/token", (req, res) => {
 });
 
 app.post("/auth/register", (req, res) => {
-  const { name, password, email } = req.body;
+  const { name, password, email, permissions } = req.body;
   const user = users.find((user) => {
     return user.email === email;
   });
@@ -108,6 +108,7 @@ app.post("/auth/register", (req, res) => {
       password: hash,
       email,
       refreshToken: null,
+      permissions,
     });
     fs.writeFileSync("db.json", JSON.stringify({ ...database, users }));
     res.sendStatus(201);
